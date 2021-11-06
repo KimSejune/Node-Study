@@ -8,7 +8,6 @@ const authenticateUser = async (req, res, next) => {
     }
     const token = req.headers.authorization;
     const payload = await verifyToken(token);
-    consoke.log("payload ", payload);
     const user = await MemberSchema.findById(payload._id)
       .select("-password")
       .lean()

@@ -11,7 +11,6 @@ const newToken = (user) => {
 };
 
 const verifyToken = async (token) => {
-  console.log("toekn", token);
   const payload = await jwt.verify(token, process.env.SECRET_KEY);
   if (!payload) {
     throw new Error("Payload Not found");
