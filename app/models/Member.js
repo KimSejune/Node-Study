@@ -1,5 +1,6 @@
 const MemberSchema = require("../schema/MemberSchema");
 const { newToken } = require("../utils/auth");
+const Conn = require("../database/mysql");
 
 const bcrypt = require("bcrypt");
 class Member {
@@ -31,12 +32,17 @@ class Member {
 
   async signUp(username, hashedPassword, nickname) {
     try {
-      const newUser = new MemberSchema({
-        username,
-        password: hashedPassword,
-        nickname,
-      });
-      return await newUser.save();
+      // const newUser = new MemberSchema({
+      //   username,
+      //   password: hashedPassword,
+      //   nickname,
+      // });
+      // return await newUser.save();
+      const qparams = { username, hashedPassword, nickname };
+      const sql = `
+        INSERT INTO member (email, password, nickname) VALUES (:username, :hashedPassword, :nickname)
+      `;
+      return await Conn.query(sql, qparams);
     } catch (error) {
       throw error;
     }
