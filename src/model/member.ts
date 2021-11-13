@@ -1,6 +1,16 @@
 import Conn from "../database/mysql";
 import { BaseMember } from "./types/member";
 
+export async function get(username: string) {
+  try {
+    const sql = `SELECT * FROM member WHERE username = :username`;
+    const result = await Conn.query(sql, { username });
+    return result ? result[0] : null;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function signUp(params: BaseMember) {
   try {
     const sql = `

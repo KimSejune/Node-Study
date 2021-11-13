@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import { BaseMember } from "../model/types/member";
+import { AuthMember, BaseMember } from "../model/types/member";
 import * as MemberService from "../service/member";
 const router = express.Router();
 
@@ -17,7 +17,22 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const login = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { username, password } = req.body;
+    const params: AuthMember = {
+      username,
+      password,
+    };
+    const result = await MemberService.login(params);
+    res.send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 router.get("/", get);
 router.post("/signup", signUp);
+router.post("/login", login);
 
 module.exports = router;
