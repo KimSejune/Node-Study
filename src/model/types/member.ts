@@ -12,3 +12,8 @@ export interface BaseMember extends AuthMember {
 export interface Member extends BaseMember {
   id: number;
 }
+
+export interface PayloadMember {
+  id: number;
+  username: string;
+}

@@ -21,3 +21,15 @@ export async function signUp(params: BaseMember) {
     throw error;
   }
 }
+
+export async function findById(id: number) {
+  try {
+    const sql = `
+      SELECT * FROM member WHERE id = :id
+    `;
+    const result = await Conn.query(sql, { id });
+    return result ? result[0] : null;
+  } catch (error) {
+    throw error;
+  }
+}
