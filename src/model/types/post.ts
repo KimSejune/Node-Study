@@ -6,3 +6,9 @@ export interface Post {
   created_at: Date;
   updated_at: Date;
 }
+
+export interface PostInfo {
+  member_id: number;
+  title: string;
+  description: string;
+}

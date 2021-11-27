@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import * as PostService from "../service/post";
-import { Post } from "../model/types/post";
+import { Post, PostInfo } from "../model/types/post";
 
 import { authenticateUser } from "../middleware/auth";
 
@@ -25,7 +25,23 @@ const get = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const create = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id: memberId } = req.user;
+    const { title, description } = req.body;
+    const result = await PostService.create({
+      member_id: memberId,
+      title,
+      description,
+    });
+    res.send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 router.get("/", authenticateUser, getList);
 router.get("/:id", authenticateUser, get);
+router.post("/", authenticateUser, create);
 
 module.exports = router;

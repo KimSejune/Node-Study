@@ -1,4 +1,5 @@
 import Conn from "../database/mysql";
+import { PostInfo } from "./types/post";
 
 export async function getList() {
   try {
@@ -17,3 +18,19 @@ export async function get(id: number) {
     throw error;
   }
 }
+
+export async function create(postInfo: PostInfo) {
+  try {
+    const sql = `INSERT INTO post (member_id, title, description) VALUES (:member_id, :title, :description)`;
+    return await Conn.query(sql, postInfo);
+  } catch (error) {
+    throw error;
+  }
+}
+
+// INSERT INTO hire_sales_filter
+//       (cppc_member_id, is_new)
+//     VALUES
+//       (:cppc_member_id, :is_new)
+//     ON DUPLICATE KEY UPDATE
+//       is_new = :is_new
