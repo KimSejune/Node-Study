@@ -1,10 +1,9 @@
-import { Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../utils/auth";
 import { findById } from "../model/member";
-import { IGetUserAuthInfoRequest } from "../types/express";
 
-async function authenticateUser(
-  req: IGetUserAuthInfoRequest,
+export async function authenticateUser(
+  req: Request,
   res: Response,
   next: NextFunction
 ) {
@@ -13,9 +12,7 @@ async function authenticateUser(
       return res.status(401).json({ message: "token must be included" });
     }
     const token = req.headers.authorization;
-    console.log("token", token);
     const payload: any = await verifyToken(token);
-    console.log("payload", payload);
     const user = await findById(payload.id);
 
     if (!user) {
@@ -28,5 +25,3 @@ async function authenticateUser(
     return res.status(401).json({ message: "token is invalid" });
   }
 }
-
-export = { authenticateUser };
