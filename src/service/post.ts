@@ -26,3 +26,19 @@ export async function create(postInfo: PostInfo) {
     throw error;
   }
 }
+
+export async function remove(id: number, memberId: number) {
+  try {
+    const post: Post = await PostModel.get(id);
+    if (!post) {
+      throw new Error("없는 포스트입니다!");
+    }
+    if (post.member_id !== memberId) {
+      throw new Error("작성자가 아니다!");
+    }
+
+    return await PostModel.remove(id);
+  } catch (error) {
+    throw error;
+  }
+}

@@ -40,8 +40,20 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const remove = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id: memberId } = req.user;
+    const { id } = req.params;
+    const result = await PostService.remove(parseInt(id), memberId);
+    res.send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 router.get("/", authenticateUser, getList);
 router.get("/:id", authenticateUser, get);
 router.post("/", authenticateUser, create);
+router.delete("/:id", authenticateUser, remove);
 
 module.exports = router;

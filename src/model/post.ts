@@ -13,7 +13,8 @@ export async function getList() {
 export async function get(id: number) {
   try {
     const sql = `SELECT * FROM post WHERE id = :id`;
-    return await Conn.query(sql, { id });
+    const result = await Conn.query(sql, { id });
+    return result ? result[0] : null;
   } catch (error) {
     throw error;
   }
@@ -28,9 +29,11 @@ export async function create(postInfo: PostInfo) {
   }
 }
 
-// INSERT INTO hire_sales_filter
-//       (cppc_member_id, is_new)
-//     VALUES
-//       (:cppc_member_id, :is_new)
-//     ON DUPLICATE KEY UPDATE
-//       is_new = :is_new
+export async function remove(id: number) {
+  try {
+    const sql = `DELETE FROM post WHERE id = :id`;
+    return await Conn.query(sql, { id });
+  } catch (error) {
+    throw error;
+  }
+}
