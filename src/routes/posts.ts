@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import * as PostService from "../service/post";
-import { Post, PostInfo } from "../model/types/post";
+import { Post } from "../model/types/post";
 
 import { authenticateUser } from "../middleware/auth";
 
@@ -51,9 +51,27 @@ const remove = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const update = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id: memberId } = req.user;
+    const { id } = req.params;
+    const { title, description } = req.body;
+    const result = await PostService.update({
+      id: parseInt(id),
+      member_id: memberId,
+      title,
+      description,
+    });
+    res.send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 router.get("/", authenticateUser, getList);
 router.get("/:id", authenticateUser, get);
 router.post("/", authenticateUser, create);
 router.delete("/:id", authenticateUser, remove);
+router.put("/:id", authenticateUser, update);
 
 module.exports = router;

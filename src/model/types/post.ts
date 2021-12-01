@@ -9,3 +9,7 @@ export interface PostInfo {
   title: string;
   description: string;
 }
+
+export interface UpdateInfo extends PostInfo {
+  id: number;
+}

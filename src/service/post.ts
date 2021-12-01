@@ -1,5 +1,5 @@
 import * as PostModel from "../model/post";
-import { Post, PostInfo } from "../model/types/post";
+import { Post, PostInfo, updateInfo } from "../model/types/post";
 
 export async function getList() {
   try {
@@ -29,16 +29,28 @@ export async function create(postInfo: PostInfo) {
 
 export async function remove(id: number, memberId: number) {
   try {
-    const post: Post = await PostModel.get(id);
-    if (!post) {
-      throw new Error("없는 포스트입니다!");
-    }
-    if (post.member_id !== memberId) {
-      throw new Error("작성자가 아니다!");
-    }
-
+    await checkPostOwner(id, memberId);
     return await PostModel.remove(id);
   } catch (error) {
     throw error;
+  }
+}
+
+export async function update(updateInfo: updateInfo) {
+  try {
+    await checkPostOwner(updateInfo.id, updateInfo.member_id);
+    return await PostModel.update(updateInfo);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function checkPostOwner(id: number, memberId: number) {
+  const post: Post = await PostModel.get(id);
+  if (!post) {
+    throw new Error("없는 포스트입니다!");
+  }
+  if (post.member_id !== memberId) {
+    throw new Error("작성자가 아니다!");
   }
 }
