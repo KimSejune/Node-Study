@@ -1,5 +1,5 @@
 import Conn from "../database/mysql";
-import { BaseMember } from "./types/member";
+import { BaseMember, TokenMember } from "./types/member";
 
 export async function get(username: string) {
   try {
@@ -34,13 +34,13 @@ export async function findById(id: number) {
   }
 }
 
-export async function setMemberRefreshToken(id: number, refreshToken: string) {
+export async function setMemberRefreshToken(tokenMember: TokenMember) {
   try {
     const sql = `
       UPDATE member SET refreshToken = :refreshToken
       WHERE id = :id
     `;
-    return await Conn.query(sql, { id, refreshToken });
+    return await Conn.query(sql, tokenMember);
   } catch (error) {
     throw error;
   }

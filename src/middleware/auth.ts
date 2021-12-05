@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../utils/auth";
 import { findById } from "../model/member";
+import { PayloadMember } from "../model/types/member";
 
 export async function authenticateUser(
   req: Request,
@@ -12,7 +13,10 @@ export async function authenticateUser(
       return res.status(401).json({ message: "token must be included" });
     }
     const token = req.headers.authorization;
-    const payload: any = await verifyToken(token);
+    const payload: PayloadMember = await verifyToken(
+      token,
+      `${process.env.ACCESS_TOKEN_SECRET_KEY}`
+    );
     const user = await findById(payload.id);
     if (!user) {
       return res.status(401).json({ message: "user is not found" });

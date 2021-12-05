@@ -17,3 +17,8 @@ export interface PayloadMember {
   id: number;
   username: string;
 }
+
+export interface TokenMember {
+  id: number;
+  refreshToken: string;
+}
