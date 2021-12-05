@@ -14,14 +14,16 @@ export async function authenticateUser(
     const token = req.headers.authorization;
     const payload: any = await verifyToken(token);
     const user = await findById(payload.id);
-
     if (!user) {
       return res.status(401).json({ message: "user is not found" });
     }
 
     req.user = user;
     next();
-  } catch (e) {
+  } catch (e: Error) {
+    if (e.name === "TokenExpiredError") {
+      return res.status(403).json({ message: e.message });
+    }
     return res.status(401).json({ message: "token is invalid" });
   }
 }

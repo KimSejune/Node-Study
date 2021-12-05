@@ -25,9 +25,16 @@ const getPayload = (user: Member): PayloadMember => {
 };
 
 export const verifyToken = async (token: string) => {
-  const payload = await jwt.verify(token, `${process.env.SECRET_KEY}`);
-  if (!payload) {
-    throw new Error("Payload Not found");
+  try {
+    const payload = await jwt.verify(
+      token,
+      `${process.env.ACCESS_TOKEN_SECRET_KEY}`
+    );
+    if (!payload) {
+      throw new Error("Payload Not found");
+    }
+    return payload;
+  } catch (error) {
+    throw error;
   }
-  return payload;
 };
