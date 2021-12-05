@@ -4,7 +4,7 @@
 import bcrypt from "bcrypt";
 import { AuthMember, BaseMember, Member } from "../model/types/member";
 import * as MemberModel from "../model/member";
-import { newToken } from "../utils/auth";
+import { newToken, refreshToken } from "../utils/auth";
 /**
  * Service Methods
  */
@@ -20,11 +20,14 @@ export async function login(params: AuthMember) {
     if (!isCorrect) {
       throw new Error("User Password incorrect!");
     }
+    const rToken = refreshToken(user);
+    await MemberModel.setMemberRefreshToken(user.id, rToken);
 
     const memberInfo = {
       username: user.username,
       nickname: user.nickname,
-      token: newToken(user),
+      accessToken: newToken(user),
+      refreshToken: rToken,
     };
     return memberInfo;
   } catch (error) {

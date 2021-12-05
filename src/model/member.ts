@@ -33,3 +33,15 @@ export async function findById(id: number) {
     throw error;
   }
 }
+
+export async function setMemberRefreshToken(id: number, refreshToken: string) {
+  try {
+    const sql = `
+      UPDATE member SET refreshToken = :refreshToken
+      WHERE id = :id
+    `;
+    return await Conn.query(sql, { id, refreshToken });
+  } catch (error) {
+    throw error;
+  }
+}
